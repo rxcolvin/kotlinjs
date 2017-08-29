@@ -89,7 +89,7 @@ data class UIState<T>(
 /**
  *
  */
-interface ContainerUI {
+interface ContainerUI : UI {
   fun textFieldEditorUI(name: String): TextFieldEditorUI
   fun longFieldEditorUI(name: String): LongFieldEditorUI
   fun fieldListUI(name: String): ListEditorUI

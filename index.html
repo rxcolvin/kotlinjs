@@ -17,20 +17,27 @@
     <button data-fieldName="save">Save</button>
 </div>
 
-<div id="EntryPoint" data-rest-endpoint="http://localhost:8080">
-    <div data-class="EntityEditor" data-entity-type="Foo">
+<div id="EntryPoint">
+    <div data-type="Container" data-name="person-data">
         <div>
-            <label data-fieldName="firstName">First Name</label>
-            <input data-fieldName="firstName"></div>
+            <label data-type ="TextField" data-name="firstName">First Name</label>
+            <input data-type ="Label" data-name="firstName-label">
+        </div>
         <div>
-            <label data-fieldName="lastName">Last Name</label>
-            <input data-fieldName="lastName"></div>
-        <div>
-            <button data-fieldName="save">Save</button>
-            <button data-fieldName="cancel">Cancel</button>
+            <label data-type ="TextField" data-name="lastName">Last Name</label>
+            <input data-type ="Label" data-name="lastName-label">
         </div>
     </div>
+    <div data-name="actions">
+        <button data-type ="Action" data-name="save-action">Save</button>
+        <button data-type ="Action" data-name="cancel-action">Cancel</button>
+    </div>
 </div>
+
+<template id="foo-factory">
+    <!-- Aide -Memoir-->
+
+</template>
 
 <script type="text/javascript" src="target/classes/lib/kotlin.js"></script>
 <script type="text/javascript" src="target/classes/kotlinjs.js"></script>

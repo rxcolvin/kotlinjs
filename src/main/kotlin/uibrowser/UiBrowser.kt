@@ -9,6 +9,8 @@ import uimodel.*
  */
 
 
+abstract class UI : uimodel.UI {}
+
 class AppUI : uimodel.AppUI {
 
 }
@@ -20,35 +22,37 @@ class WindowUI : uimodel.WindowUI {
 }
 
 
-fun divToMap(div: HTMLDivElement): Map<String, HTMLElement> =
+fun divToMap(div: HTMLDivElement): Map<String, UI> =
+    //TODO sort out nested divs
     div.children.asList().filter {
-      it.hasAttribute("data-fieldName") && it is HTMLElement
+      it.hasAttribute("data-name") && it is HTMLElement
     }.map {
-      Pair(it.getAttribute("data-fieldName") as String, it as HTMLElement)
+      val name = it.getAttribute("data-name")
+      Pair(name as String, elementToUI(name, it as HTMLElement))
     }.map {
       println(it)
       it
     }.toMap()
 
+fun elementToUI(
+    name: String,
+    element: HTMLElement
+) = when (element) {
+  is HTMLLabelElement -> LabelUI(name, element)
+  fsdfsdfsdf //Container, INput, Action
+  else -> throw RuntimeException()
+}
 
-class BrowserContainerUI(
+
+class ContainerUI(
+    override val name: String,
     element: HTMLDivElement
-) : uimodel.ContainerUI {
-  val elementMap = divToMap(element)
-
-  private fun fieldEditorElementFor(name: String) =
-      elementMap.get(name) as HTMLInputElement
-
-  private fun actionElementFor(name: String): HTMLButtonElement {
-    val ret = elementMap.get(name)
-    println(ret)
-    return ret as HTMLButtonElement
-  }
-
+) : uimodel.ContainerUI, UI() {
+  val uiMap = divToMap(element)
 
   override fun textFieldEditorUI(name: String): TextFieldEditorUI = BrowserTextFieldEditorUI(
       name = name,
-      element = fieldEditorElementFor(name)
+      element = uiMap.get(name) as HTMLInputElement
   )
 
   override fun longFieldEditorUI(name: String): LongFieldEditorUI {
@@ -59,9 +63,11 @@ class BrowserContainerUI(
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun containerUI(name: String): ContainerUI {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
+  override fun containerUI(name: String): uimodel.ContainerUI =
+      ContainerUI(
+          name = name,
+          element = uiMap.get(name) as HTMLDivElement
+      )
 
   override fun actionUI(
       name: String,
@@ -69,10 +75,10 @@ class BrowserContainerUI(
   ): ActionUI = ActionUI(
       name = name,
       onFired = onFired,
-      element = actionElementFor(name)
+      element = uiMap.get(name) as HTMLButtonElement
   )
 
-  override fun labelUI(name: String): LabelUI {
+  override fun labelUI(name: String): uimodel.LabelUI {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -121,7 +127,7 @@ class ActionUI(
     override val name: String,
     val element: HTMLButtonElement,
     override val onFired: () -> Unit
-) : uimodel.ActionUI {
+) : uimodel.ActionUI, UI() {
   init {
     println("Click Set")
     element.onclick = { _ -> println("onFired");onFired() }
@@ -130,6 +136,17 @@ class ActionUI(
   override val label: String
     get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
   override var enabled: Boolean
+    get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    set(value) {}
+
+}
+
+class LabelUI(
+    override val name: String,
+    val element: HTMLLabelElement
+
+) : uimodel.LabelUI, UI() {
+  override var label: String
     get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
     set(value) {}
 
