@@ -25,6 +25,7 @@ interface UI {
 
 
 interface FieldEditorUI<T> : UI {
+  var value: T
   var uiState: UIState<T>
   var updateListener: (String) -> UIState<T>
 }
@@ -43,7 +44,6 @@ interface DateFieldEditorUI : FieldEditorUI<Date> {
   var style: String //Slider, List
 }
 
-
 interface ListEditorUI : UI {
   var uiState: UIState<Int>
   var onUpdate: (String) -> UIState<Int>
@@ -52,7 +52,7 @@ interface ListEditorUI : UI {
 }
 
 interface LabelUI : UI {
-  val label: String
+  var label: String
 }
 
 // Placeholder
@@ -63,8 +63,8 @@ interface ImageIUI : UI {
 
 interface ActionUI : UI {
   val label: String
-  val enabled: Boolean
-  val onFired: (source: ActionUI) -> Unit
+  val onFired: () -> Unit
+  var enabled: Boolean
 }
 
 
@@ -82,7 +82,8 @@ data class UIState<T>(
     val value: T? = null,
     val isReadOnly: Boolean = false,
     val validState: ValidState = ValidState.OK,
-    val hasFocus: Boolean = false
+    val hasFocus: Boolean = false,
+    val isDirty: Boolean  = false
 )
 
 /**
@@ -93,7 +94,10 @@ interface ContainerUI {
   fun longFieldEditorUI(name: String): LongFieldEditorUI
   fun fieldListUI(name: String): ListEditorUI
   fun containerUI(name: String): ContainerUI
-  fun actionUI(name: String): ActionUI
+  fun actionUI(
+      name: String,
+      onFired: () -> Unit
+  ): ActionUI
   fun labelUI(name: String): LabelUI
   fun actionGroupUI(name: String): ActionGroupUI
 }
