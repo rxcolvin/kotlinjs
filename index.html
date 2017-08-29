@@ -2,12 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Console Output</title>
+    <title>One Field</title>
 </head>
 <body>
 
-<script type="text/javascript" src="out/production/KOtlinJS/lib/kotlin.js"></script>
-<script type="text/javascript" src="out/production/KOtlinJS/KOtlinJS.js"></script>
+
+<div id="foo">
+    <label data-fieldName="bar">Bar</label><input data-fieldName="bar"/>
+</div>
+
+<div id="EntryPoint" data-rest-endpoint="http://localhost:8080">
+    <div data-class="EntityEditor" data-entity-type="Foo">
+        <div>
+            <label data-fieldName="firstName">First Name</label>
+            <input data-fieldName="firstName"></div>
+        <div>
+            <label data-fieldName="lastName">Last Name</label>
+            <input data-fieldName="lastName"></div>
+        <div>
+            <button data-fieldName="save">Save</button>
+            <button data-fieldName="cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="target/classes/lib/kotlin.js"></script>
+<script type="text/javascript" src="target/classes/kotlinjs.js"></script>
 
 </body>
 </html>
