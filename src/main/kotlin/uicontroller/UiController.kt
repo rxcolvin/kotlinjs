@@ -12,8 +12,8 @@ interface FieldController {
   val isDirty : Boolean
 }
 
-class TextFieldController(
-    var fieldEditorUI: TextFieldEditorUI
+class StringEditorController(
+    var fieldEditorUI: StringEditorUI
 ) : FieldController {
   override val name: String
     get() = fieldEditorUI.name
@@ -89,5 +89,5 @@ fun bind(
     uiFieldMeta: UIFieldMeta,
     containerUI: ContainerUI
 ) : FieldController {
-  return TextFieldController(containerUI.textFieldEditorUI(uiFieldMeta.name))
+  return StringEditorController(containerUI.ui(uiFieldMeta.name, StringEditorUI::class))
 }

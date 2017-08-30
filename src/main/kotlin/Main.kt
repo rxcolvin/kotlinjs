@@ -1,9 +1,9 @@
 import org.w3c.dom.HTMLDivElement
-import uibrowser.BrowserContainerUI
+import uibrowser.ActionUI
 import uicontroller.EditorPanelController
 import uicontroller.UIFieldMeta
 import uicontroller.bind
-import uimodel.UIState
+import uimodel.ContainerUI
 import kotlin.browser.document
 
 /**
@@ -25,23 +25,26 @@ fun main(args: Array<String>) {
 //    }
 //  }
 
-  val uiMetas = arrayOf(UIFieldMeta("firstName"))
+  val uiMetas = arrayOf(UIFieldMeta("firstName"), UIFieldMeta("lastName"))
 
-  (document.getElementById("bar") as? HTMLDivElement)?.let {
-    val containerUI = BrowserContainerUI(
-        element = it
-    )
-    val editorPanelController = EditorPanelController (
-        bind(uiMetas, containerUI)
-    )
+  (document.getElementById("EntryPoint") as? HTMLDivElement)?.let {
+    try {
+      val appUI = uibrowser.AppUI(
+          element = it
+      )
 
-    containerUI.actionUI("save") {
-      println("Saving")
-      println(editorPanelController.data())
+      val editorPanelController = EditorPanelController(
+          bind(uiMetas, appUI.rootContainer.ui<ContainerUI>("person-data", ContainerUI::class))
+      )
+
+      appUI.rootContainer.ui<ActionUI>("save-action", ActionUI::class).onFired = {
+        println("Saving")
+        println(editorPanelController.data())
+      }
+
+
+    } catch (e: Exception) {
+      println(e.message)
     }
-
-
   }
-
-
 }

@@ -3,6 +3,8 @@
  */
 package uimodel
 
+import kotlin.reflect.KClass
+
 class Image {
 
 }
@@ -30,7 +32,7 @@ interface FieldEditorUI<T> : UI {
   var updateListener: (String) -> UIState<T>
 }
 
-interface TextFieldEditorUI : FieldEditorUI<String> {
+interface StringEditorUI : FieldEditorUI<String> {
   var format: String
 }
 
@@ -63,7 +65,7 @@ interface ImageIUI : UI {
 
 interface ActionUI : UI {
   val label: String
-  val onFired: () -> Unit
+  var onFired: () -> Unit
   var enabled: Boolean
 }
 
@@ -90,16 +92,7 @@ data class UIState<T>(
  *
  */
 interface ContainerUI : UI {
-  fun textFieldEditorUI(name: String): TextFieldEditorUI
-  fun longFieldEditorUI(name: String): LongFieldEditorUI
-  fun fieldListUI(name: String): ListEditorUI
-  fun containerUI(name: String): ContainerUI
-  fun actionUI(
-      name: String,
-      onFired: () -> Unit
-  ): ActionUI
-  fun labelUI(name: String): LabelUI
-  fun actionGroupUI(name: String): ActionGroupUI
+   fun <T:UI> ui(name:String, klass: KClass<T>) : T
 }
 
 interface WindowUI {
@@ -110,7 +103,12 @@ interface WindowUI {
  *
  */
 interface AppUI {
+  val rootContainer:ContainerUI
 
 }
+
+
+
+
 
 

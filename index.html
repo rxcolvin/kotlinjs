@@ -7,25 +7,15 @@
 <body>
 
 
-<div id="foo">
-    <label data-fieldName="bar">Bar</label><input data-fieldName="bar"/>
-
-</div>
-
-<div id="bar">
-    <input data-fieldName="firstName"/>
-    <button data-fieldName="save">Save</button>
-</div>
-
 <div id="EntryPoint">
     <div data-type="Container" data-name="person-data">
         <div>
-            <label data-type ="TextField" data-name="firstName">First Name</label>
-            <input data-type ="Label" data-name="firstName-label">
+            <label data-type ="Label" data-name="firstName-label">First Name</label>
+            <input data-type ="StringEditor" data-name="firstName"/>
         </div>
         <div>
-            <label data-type ="TextField" data-name="lastName">Last Name</label>
-            <input data-type ="Label" data-name="lastName-label">
+            <label data-type ="Label" data-name="lastName-label">Last Name</label>
+            <input data-type ="StringEditor" data-name="lastName">
         </div>
     </div>
     <div data-name="actions">
