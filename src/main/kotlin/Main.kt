@@ -1,3 +1,4 @@
+import httprpc.get
 import org.w3c.dom.HTMLDivElement
 import uibrowser.ActionUI
 import uicontroller.EditorPanelController
@@ -24,6 +25,16 @@ fun main(args: Array<String>) {
 //      UIState(value = it)
 //    }
 //  }
+
+  get(
+      url = "https://api.ipify.org?format=json",
+      headers = listOf(
+       )
+  ).then(
+      onFulfilled = { println(it) },
+      onRejected = { println(it.message) }
+  )
+
 
   val uiMetas = arrayOf(UIFieldMeta("firstName"), UIFieldMeta("lastName"))
 
