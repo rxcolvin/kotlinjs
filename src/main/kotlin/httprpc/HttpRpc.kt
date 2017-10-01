@@ -10,38 +10,61 @@ import kotlin.js.Promise
 //executor: (resolve: (T) -> kotlin.Unit, reject: (kotlin.Throwable) -> kotlin.Unit) -> kotlin.Unit
 
 
-data class HttpReq(
-    val body: String,
-    val headers: Map<String, List<String>> = emptyMap()
-)
-
 data class HttpResp(
-    val body: String
+    val body: String,
+    val status: Int = 200,
+    val headers: List<Pair<String, String>>  = emptyList()
 )
 
 fun get(
     url: String,
     headers: List<Pair<String, String>>  = emptyList()
 ) =
+    invoke("GET", url, null, headers)
+
+fun put(
+    url: String,
+    body: String,
+    headers: List<Pair<String, String>>  = emptyList()
+) =  invoke("PUT", url, null, headers)
+
+fun post(
+    url: String,
+    body: String,
+    headers: List<Pair<String, String>>  = emptyList()
+) =  invoke("POST", url, null, headers)
+
+
+private fun invoke(
+    type: String,
+    url: String,
+    body: String? = null,
+    headers: List<Pair<String, String>>  = emptyList(),
+    respHeaders: List<String> = emptyList()
+) =
     Promise<HttpResp> { resolve, reject ->
       val xhr = XMLHttpRequest()
-      xhr.open("GET",  url)
+      xhr.open(type,  url)
       headers.forEach {
         xhr.setRequestHeader(it.first, it.second)
       }
 
-      xhr.onload = { resolve(HttpResp(xhr.responseText)) }
+      xhr.onload = { resolve(
+          HttpResp(
+              body = xhr.responseText,
+              status = xhr.status.toInt(),
+              headers = respHeaders.map {
+                it to xhr.getResponseHeader(it)
+              }
+                  .filter{it.second != null}
+                  .map {
+                     it.first to it.second as String
+                  }
+              )
+      ) }
       xhr.onerror = {
         reject(RuntimeException(xhr.responseText))
       }
-      xhr.send()
+      if (body != null) xhr.send(body) else (xhr.send())
     }
 
-
-fun main(args: Array<String>) {
-
-
-
-
-
-}

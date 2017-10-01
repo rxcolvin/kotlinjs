@@ -27,9 +27,7 @@ fun main(args: Array<String>) {
 //  }
 
   get(
-      url = "https://api.ipify.org?format=json",
-      headers = listOf(
-       )
+      url = "https://api.ipify.org?format=json"
   ).then(
       onFulfilled = { println(it) },
       onRejected = { println(it.message) }
